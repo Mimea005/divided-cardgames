@@ -1,33 +1,40 @@
 import Card from "../modules/Card.js";
 import Player from "../modules/Player.js";
-import { random, randomPop } from "../modules/Random.js";
+import * as Random from "../modules/Random.js";
+import * as Display from "../modules/Display.js";
 
 //PART Globals
+//DOM Elements
+let dealerAreaDiv = document.getElementById("dealer");
+let playerAreaDiv = document.getElementById("player");
+let buttonsDiv = document.getElementById("buttonsDiv");
 
 let testBtn = document.getElementById("testBtn");
+testBtn.onclick = start;
 
 let defaultStackValues = [];
-for (let h = 0; h < Card.houses.length; h++) {
+//Generer generel kortstokk (Er for lat for å manuelt skrive alle kortene)
+for (let h = 0; h < Card.suit.length; h++) {
     for (let v = 1; v <= 13; v++) {
         if (v == 11) {
             defaultStackValues.push(
-                new Card(Card.houses[h], 10, 'j')
+                new Card(Card.suit[h].name, 10, 'J')
             );
             continue;
         } else if (v == 12) {
             defaultStackValues.push(
-                new Card(Card.houses[h], 10, 'q')
+                new Card(Card.suit[h].name, 10, 'Q')
             );
             continue;
         } else if (v == 13) {
             defaultStackValues.push(
-                new Card(Card.houses[h], 10, 'k')
+                new Card(Card.suit[h].name, 10, 'K')
             );
             continue;
         }
 
         defaultStackValues.push(
-            new Card(Card.houses[h], v)
+            new Card(Card.suit[h].name, v)
         );
     }
 }
@@ -36,116 +43,153 @@ let cardDeck = []; //Should only be populated with Card objects
 
 let player;
 let dealer;
+let turn;
 
 //PART Fases
 
 function start() {
+    console.log(cardDeck.length);
     if (cardDeck.length < defaultStackValues.length) {
         cardDeck = generateDeck(3);
-        alert("We are using a new card deck")
+        alert("We are using a new deck of cards");
     }
 
     player = new Player();
     dealer = new Player();
 
-    game()
-
-}
-
-function game() {
-    // Setup game interface
     player.getCards(cardDeck, 2);
     dealer.getCards(cardDeck, 2);
 
-    let playerChoice = true;
-    while (playerChoice) {
-        let message =
-            `You:\n${drawCard(player.cards)} (Total: ${player.sumCardValues()})
-Dealer:\n${drawCard([dealer.cards[0]])}  - hidden
-Do you want a new card?`
-        playerChoice = confirm(message);
-        if (playerChoice) { player.getCards(cardDeck, 1) }
+    playerAreaDiv.innerHTML = Display.drawCards(player.cards);
+    dealerAreaDiv.innerHTML = Display.drawCards(dealer.cards, [0])
 
-        if (player.sumCardValues() > 21) {
-            break;
-        }
-    }
-
-    alert(
-        `You:\n${drawCard(player.cards)} (Total: ${player.sumCardValues()})
-Dealer:\n${drawCard(dealer.cards)} (Total: ${dealer.sumCardValues()})`
-    );
-
-    while (dealer.sumCardValues() < 17) {
-        dealer.getCards(cardDeck, 1);
-        alert(
-            `You:\n${drawCard(player.cards)} (Total: ${player.sumCardValues()})
-Dealer:\n${drawCard(dealer.cards)} (Total: ${dealer.sumCardValues()})`
-        );
-    }
-
-    if (player.sumCardValues() > 21) {
-        loose()
-    } else if (player.sumCardValues() == 21 || dealer.sumCardValues() > 21) {
-        win();
-    } else if (player.sumCardValues() == dealer.sumCardValues()) {
-        tie();
-    } else {
-        player.sumCardValues() > dealer.sumCardValues() ? win() : loose();
-    }
+    showPlayerBtn();
 
 }
 
+function showPlayerBtn() {
+    buttonsDiv.innerHTML = /*html*/`
+        <button>Hit</button>
+        <button>Hold</button>
+    `;
 
+    buttonsDiv.children[0].addEventListener("click", hit);
+    buttonsDiv.children[1].addEventListener("click", hold);
+}
+
+function hit() {
+    player.getCards(cardDeck, 1);
+    playerAreaDiv.innerHTML = Display.drawCards(player.cards);
+    checkPlayerCards();
+}
+
+function checkPlayerCards() {
+    let score = player.sumCardValues();
+    if (score == 21 || score > 21) {
+        hold();
+    }
+}
+
+function hold() {
+    buttonsDiv.innerHTML = "";
+    playDealer();
+}
+
+function playDealer() {
+
+    buttonsDiv.innerHTML = /* html */`
+        <button>Next</button>
+    `;
+    buttonsDiv.children[0].addEventListener("click", dealerNext)
+
+    dealerAreaDiv.innerHTML = Display.drawCards(dealer.cards);
+}
+
+function dealerNext() {
+    if (dealer.sumCardValues() < 17) {
+        dealer.getCards(cardDeck, 1);
+        dealerAreaDiv.innerHTML = Display.drawCards(dealer.cards);
+    } else if (dealer.sumCardValues() >= 17) {
+        evaluateGame()
+
+    }
+}
+
+function evaluateGame() {
+    buttonsDiv.innerHTML = "";
+    let playerScore = player.sumCardValues();
+    let dealerScore = dealer.sumCardValues();
+    if (playerScore == dealerScore || (playerScore > 21 && dealerScore > 21)) {
+        tie()
+    } else if (playerScore > 21) {
+        loose()
+    } else if (dealerScore > 21) {
+        win()
+    } else {
+        playerScore > dealerScore ? win() : loose();
+    }
+}
 
 function win() {
+    buttonsDiv.innerHTML = "";
+
     let message = "You won with the cards:\n";
     player.cards.forEach(card => {
-        message += `    - ${card.house} ${card.symbol}\n`;
+        message += `    - ${card.suit.symbol} ${card.symbol}\n`;
     });
     message += `for a total of ${player.sumCardValues()}\n`;
     message += "Against the dealer with the cards:\n"
     dealer.cards.forEach(card => {
-        message += `    - ${card.house} ${card.symbol}\n`;
+        message += `    - ${card.suit.symbol} ${card.symbol}\n`;
     });
     message += `for a total of ${dealer.sumCardValues()}\n`;
     alert(message);
+
     continueGame();
 
 }
 
 function loose() {
+    buttonsDiv.innerHTML = "";
+
     let message = "You lost with the cards:\n";
     player.cards.forEach(card => {
-        message += `    - ${card.house} ${card.symbol}\n`;
+        message += `    - ${card.suit.symbol} ${card.symbol}\n`;
     });
     message += `for a total of ${player.sumCardValues()}\n`;
     message += "Against the dealer with the cards:\n"
     dealer.cards.forEach(card => {
-        message += `    - ${card.house} ${card.symbol}\n`;
+        message += `    - ${card.suit.symbol} ${card.symbol}\n`;
     });
     message += `for a total of ${dealer.sumCardValues()}\n`;
     alert(message);
+
     continueGame();
 }
 
 function tie() {
+    buttonsDiv.innerHTML = "";
+
     let message = "It's a tie!\nYou:\n";
     player.cards.forEach(card => {
-        message += `    - ${card.house} ${card.symbol}\n`;
+        message += `    - ${card.suit.symbol} ${card.symbol}\n`;
     });
     message += `for a total of ${player.sumCardValues()}\n`;
     message += "Against the dealer with the cards:\n"
     dealer.cards.forEach(card => {
-        message += `    - ${card.house} ${card.symbol}\n`;
+        message += `    - ${card.suit.symbol} ${card.symbol}\n`;
     });
     message += `for a total of ${dealer.sumCardValues()}\n`;
     alert(message);
+
     continueGame();
 }
 
 function continueGame() {
-    confirm("Do you want to continue?") ? start() : () => { };
+    buttonsDiv.innerHTML = /*html*/`
+        <button>Start new game</button>
+    `;
+    buttonsDiv.children[0].addEventListener("click", start);
 }
 
 //PART Functions
@@ -156,7 +200,7 @@ function generateDeck(amount = 1) {
     for (let i = 0; i < amount; i++) {
         let choices = [...defaultStackValues];
         while (choices.length != 0) {
-            stack.push(randomPop(choices));
+            stack.push(Random.randomPop(choices));
         }
     }
 
@@ -166,12 +210,8 @@ function generateDeck(amount = 1) {
 function drawCard(cards) {
     let message = ""
     cards.forEach((card) => {
-        message += `  - ${card.house} ${card.symbol}\n`;
+        message += `  - ${card.suit.symbol} ${card.symbol}\n`;
     })
 
     return message
-}
-
-testBtn.onclick = () => {
-    start()
 }

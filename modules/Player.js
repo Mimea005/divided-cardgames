@@ -15,7 +15,7 @@ class Player {
             return result += card.value;
         }, 0)
         aces.forEach((card) => {
-            score + 11 < 21 ? score += 11 : score += 1;
+            score + 11 <= 21 ? score += 11 : score += 1;
         })
         return score;
     }
