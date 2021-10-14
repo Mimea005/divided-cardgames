@@ -1,9 +1,16 @@
-import { Card } from "modules/Card";
+import { Card } from "./Card.js";
 
 function drawCard(card: Card): string {
     return /* html */`
         <div class="card">
-            <div class="card-row card-top">
+            <div class="card-row">
+                <p class="card-symbol">${card.suit.symbol} ${card.symbol}</p>
+                <p class="card-symbol">${card.suit.symbol} ${card.symbol}</p>
+            </div>
+            <div class="card-row card-middle">
+            <h2 class="card-symbol">${card.suit.symbol} ${card.symbol}</h2>
+            </div>
+            <div class="card-row">
                 <p class="card-symbol">${card.suit.symbol} ${card.symbol}</p>
                 <p class="card-symbol">${card.suit.symbol} ${card.symbol}</p>
             </div>

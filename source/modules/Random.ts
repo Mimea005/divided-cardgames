@@ -7,7 +7,7 @@ function random(max: number, min: number = 0): number {
 
 function randomPop(choices: Array<any>): any {
     let rIndex = random(choices.length);
-    let result = choices.splice(rIndex, 1);
+    let result = choices.splice(rIndex, 1)[0];
     return result;
 }
 

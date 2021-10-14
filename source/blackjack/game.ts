@@ -1,7 +1,7 @@
-import { Card } from "modules/Card";
-import { Player } from "modules/Player";
-import * as Random from "modules/Random";
-import * as Display from "modules/Display";
+import { Card } from "../modules/Card.js";
+import { Player } from "../modules/Player.js";
+import * as Random from "../modules/Random.js";
+import * as Display from "../modules/Display.js";
 
 let dealerAreaDiv = document.getElementById("dealerAreaDiv");
 let playerAreaDiv = document.getElementById("playerAreaDiv");
@@ -23,6 +23,8 @@ let cardDeck = Array<Card>();
 let player: Player;
 let dealer: Player;
 
+continueGame();
+
 function continueGame(): void {
     buttonsDiv!.innerHTML = /* html */`
         <button>Start new game</button>
@@ -43,7 +45,7 @@ function start(): void {
     dealer.drawCards(cardDeck, 2);
 
     playerAreaDiv.innerHTML = Display.drawCards(player.deck);
-    dealerAreaDiv.innerHTML = Display.drawCards(dealer.deck);
+    dealerAreaDiv.innerHTML = Display.drawCards(dealer.deck, [0, 1]);
 
     showPlayerBtn();
 }
@@ -122,7 +124,7 @@ function tie() {
 
     message += `Against the dealer with the cards:\n`;
     dealer.deck.forEach(card => {
-        message += `    - ${card.suit.symbol} ${card.symbol}`;
+        message += `    - ${card.suit.symbol} ${card.symbol}\n`;
     })
     message += `for a total of ${dealer.getCardSum()}.\n`;
 
@@ -142,7 +144,7 @@ function loose() {
 
     message += `Against the dealer with the cards:\n`;
     dealer.deck.forEach(card => {
-        message += `    - ${card.suit.symbol} ${card.symbol}`;
+        message += `    - ${card.suit.symbol} ${card.symbol}\n`;
     })
     message += `for a total of ${dealer.getCardSum()}.\n`;
 
@@ -162,7 +164,7 @@ function win() {
 
     message += `Against the dealer with the cards:\n`;
     dealer.deck.forEach(card => {
-        message += `    - ${card.suit.symbol} ${card.symbol}`;
+        message += `    - ${card.suit.symbol} ${card.symbol}\n`;
     })
     message += `for a total of ${dealer.getCardSum()}.\n`;
 

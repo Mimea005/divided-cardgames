@@ -10,10 +10,11 @@ interface Card {
 }
 
 class Card {
-    constructor(suit: string, value: number, symbol?: any) {
+    constructor(suit: string, value: number, symbol: number | string = value) {
         this.suit = Card.suits.filter(elem => elem.name == suit)[0],
             this.value = value;
-        this.symbol = symbol;
+
+        this.symbol = symbol
     }
 
     static suits = [

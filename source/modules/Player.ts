@@ -1,5 +1,5 @@
-import * as Random from "modules/Random";
-import { Card } from "modules/Card";
+import * as Random from "./Random.js";
+import { Card } from "./Card.js";
 
 interface Player {
     deck: Array<Card>;
