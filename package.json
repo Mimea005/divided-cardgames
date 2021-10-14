@@ -4,9 +4,14 @@
   "description": "Card games that uses html elements as game objects (Card is a div element)",
   "main": "index.js",
   "scripts": {
-    "build": "tsc"
+    "clean": "rimraf ./www",
+    "copy-files": "copyfiles -e **/*.ts -u 1 source/*/* www/",
+    "build": "npm run clean && tsc && npm run copy-files"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "rimraf": "^3.0.2"
+  }
 }

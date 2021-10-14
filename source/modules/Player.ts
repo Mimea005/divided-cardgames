@@ -5,7 +5,7 @@ interface Player {
     deck: Array<Card>;
 }
 class Player {
-    constructor(cards: Array<Card>) {
+    constructor(cards: Array<Card> = []) {
         this.deck = cards;
     }
 
