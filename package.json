@@ -1,0 +1,12 @@
+{
+  "name": "cardgames",
+  "version": "1.0.0",
+  "description": "Card games that uses html elements as game objects (Card is a div element)",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
