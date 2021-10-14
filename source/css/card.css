@@ -1,13 +1,17 @@
 .card {
-    margin: 0 auto;
     width: 15vh;
     height: 20vh;
+    background-color: whitesmoke;
     border: 5px solid lightgray;
     font-family: "Segoe UI Emoji";
-
+    
     display: flex;
     flex-direction: column;
     justify-content: center;
+}
+
+.card + .card {
+    margin: 0 20px; 
 }
 
 .card-row {
