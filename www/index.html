@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Choose a game</title>
+</head>
+
+<body>
+    <h1 id="title">Choose a game</h1>
+    <div class="games">
+        <a href="./blackjack/game.html">
+            <div class="game" id="blackjack">
+                <img src="./media/blackjack_game.png">
+                <h1>Blackjack</h1>
+            </div>
+        </a>
+    </div>
+</body>
+<style>
+    a {
+        all: unset;
+    }
+
+    body {
+        margin: 0;
+        height: 100vh;
+        background-color: whitesmoke;
+    }
+
+    #title {
+        text-align: center;
+        margin: 0;
+        padding-top: 5vh;
+    }
+
+    .games {
+        margin: 10vh 5vw;
+        display: flex;
+        justify-content: space-evenly;
+    }
+
+    .game {
+        width: 15vw;
+        background-color: white;
+    }
+
+    .game:hover {
+        border: 1vh black solid;
+    }
+
+    .game>img {
+        width: 100%;
+    }
+
+    .game>h1 {
+        text-align: center;
+    }
+</style>
+
+</html>

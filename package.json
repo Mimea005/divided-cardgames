@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "clean": "rimraf ./www",
-    "copy-files": "copyfiles -e **/*.ts -u 1 source/*/* www/",
+    "copy-files": "copyfiles -e **/*.ts -u 1 source/* source/*/* www/",
     "build": "npm run clean && tsc && npm run copy-files"
   },
   "keywords": [],
