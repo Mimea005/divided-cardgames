@@ -1,18 +1,13 @@
-export function random(max, min = 0) {
-    let diff = max - min;
-    let rDiff = Math.random() * diff;
-    let rdecimal = rDiff + min;
-    let rfloored = Math.floor(rdecimal);
-
-    return rfloored
-
+function random(max, min = 0) {
+    let result;
+    result = Math.random() * (max - min);
+    result = Math.floor(result + min);
+    return result;
 }
-
-export function randomPop(choices) {
-    let randomIndex = random(choices.length);
-    let item = choices[randomIndex];
-    choices.splice(randomIndex, 1);
-    return item
+function randomPop(choices) {
+    let rIndex = random(choices.length);
+    let result = choices.splice(rIndex, 1)[0];
+    return result;
 }
-
-export default { random, randomPop }
+export { random, randomPop };
+//# sourceMappingURL=Random.js.map

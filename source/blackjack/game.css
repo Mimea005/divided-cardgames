@@ -44,10 +44,10 @@ body {
 
 .dealer {
     align-self: flex-start;
-    justify-content: flex-start;
+    justify-content: center;
 }
 
 .player {
     align-self: flex-end;
-    justify-content: flex-end;
+    justify-content: center;
 }

@@ -1,51 +1,43 @@
-import Card from "./Card.js";
-
-export function drawCard(card) {
-    return /* html */`
+function drawCard(card) {
+    return /* html */ `
         <div class="card">
-            <div class="card-row card-top">
+            <div class="card-row">
                 <p class="card-symbol">${card.suit.symbol} ${card.symbol}</p>
                 <p class="card-symbol">${card.suit.symbol} ${card.symbol}</p>
             </div>
             <div class="card-row card-middle">
-                <h2 class="card-symbol">${card.suit.symbol} ${card.symbol}</h2>
+            <h2 class="card-symbol">${card.suit.symbol} ${card.symbol}</h2>
             </div>
-            <div class="card-row card-bottom">
+            <div class="card-row">
                 <p class="card-symbol">${card.suit.symbol} ${card.symbol}</p>
                 <p class="card-symbol">${card.suit.symbol} ${card.symbol}</p>
             </div>
         </div>
     `;
 }
-
-export function drawBack() {
-    return /* html */`
+function drawCardBack() {
+    return /* html */ `
         <div class="card card-back"></div>
     `;
 }
-
-export function drawCards(cards, visible = []) {
-    let cardDivs = "";
-    if (visible.length > 0) {
+function drawCards(cards, visible) {
+    let result = "";
+    if (!visible) {
+        for (let card of cards) {
+            result += drawCard(card);
+        }
+    }
+    else {
         if (visible.length < cards.length) {
-            let lengthDiff = cards.length - visible.length;
-            for (let i = 0; i < lengthDiff; i++) {
+            for (let i = 0; i < (cards.length - visible.length); i++) {
                 visible.push(1);
             }
         }
-
-        for (let i = 0; i < cards.length; i++) {
-            //If visible draw the card, else draw the back of the card
-            visible[i] ? cardDivs += drawCard(cards[i]) : cardDivs += drawBack();
+        for (let i in cards) {
+            visible[i] ? result += drawCard(cards[i]) : result += drawCardBack();
         }
-
-        return cardDivs;
     }
-
-    for (let card of cards) {
-        cardDivs += drawCard(card);
-    }
-    return cardDivs;
+    return result;
 }
-
-export default { drawCard }
+export { drawCard, drawCardBack, drawCards };
+//# sourceMappingURL=Display.js.map
